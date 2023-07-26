@@ -55,50 +55,6 @@ def check_apk_exist(port, cc):
     except subprocess.CalledProcessError:
         pass
 
-def delete_padding(pack_res: bytes) -> bytes:
-    '''delete the unreadable padding at the end of file'''
-    last =  pack_res[-1:]
-    if last == b'\x00':
-        return pack_res[:-1]
-    elif last == b'\x01':
-        return pack_res[:-1]
-    elif last == b'\x02':
-        return pack_res[:-2]
-    elif last == b'\x03':
-        return pack_res[:-3]
-    elif last == b'\x04':
-        return pack_res[:-4]
-    elif last == b'\x05':
-        return pack_res[:-5]
-    elif last == b'\x06':
-        return pack_res[:-6]
-    elif last == b'\x07':
-        return pack_res[:-7]
-    elif last == b'\x08':
-        return pack_res[:-8]
-    elif last == b'\t':
-        return pack_res[:-9]
-    elif last == b'\n':
-        superbytetest = last[-2:]
-        if superbytetest == b'\n\n':
-            return pack_res[:-10]
-        else:
-            return pack_res
-    elif last == b'\x0b':
-        return pack_res[:-11]
-    elif last == b'\x0c':
-        return pack_res[:-12]
-    elif last == b'\r':
-        return pack_res[:-13]
-    elif last == b'\x0e':
-        return pack_res[:-14]
-    elif last == b'\x0f':
-        return pack_res[:-15]
-    elif last == b'\x10':
-        return pack_res[:-16]
-    else:
-        return pack_res
-
 def decrypt(
         target: str,
         file: str,
@@ -108,7 +64,7 @@ def decrypt(
     word = '[end]'
     word2 = '}'
     with open(f'{target}\\{file}', 'rb') as f: 
-        res = delete_padding(AES.new(bytes(env.PACK,'utf-8'), AES.MODE_ECB).decrypt(f.read()))
+        res = AES.new(bytes(env.PACK,'utf-8'), AES.MODE_ECB).decrypt(f.read())
         f.close()
         with open(f'{target}\\{name}', 'wb') as output:
             output.write(res)
