@@ -69,7 +69,6 @@ def bcu_unit():
     except FileNotFoundError:
         print(light_blue("No icon_deploy.png found, using default icon_deploy"))
         shutil.copyfile('./res/icon_deploy.png',f'{bcu_path}/{id}{form}/icon_deploy.png')
-    
     # imgcut
     try:
         shutil.copyfile(f'{anime_path}/{id}_{form}.imgcut',f'{bcu_path}/{id}{form}/imgcut.txt')
