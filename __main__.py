@@ -23,13 +23,13 @@ def ask(message, choices):
             ),
         ]
     return inquirer.prompt(questions)["ans"]
+
 def run(func):
     os.system('cls')
     func()
     time.sleep(5)
     os.system('cls')
     main()
-
 
 def main():
     match(ask("Please Select a mode", ["Decrypt a apk", "Get server file", "Get Event File", "Moving Unit to BCU","Exit"])):
