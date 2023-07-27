@@ -70,7 +70,6 @@ def decrypt(
             output.write(res)
             print(f'{green(name)} add! {gray("")}')
             os.remove(f'{target}\\{file}')
-            #delete all the things after [end] but keep
             if name.endswith('.tsv'):
                 if word.encode() in res:
                     output.truncate(res.index(word.encode())+len(word.encode()))
@@ -102,7 +101,7 @@ def adb_event():
         # raise SystemExit(red(f'{cc.upper()} Version not found'))
     print(f'{green("Country Version selected: ")}  {cc}\n')
     cc = '' if cc == 'jp' else cc
-    print(yellow('Please select a Folder'))
+    print(yellow('Please select a Folder to save'))
     target = filedialog.askdirectory(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select folder to save")
     if not target:
         print(red("No target folder selected, Return to main menu"))

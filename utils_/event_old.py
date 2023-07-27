@@ -109,7 +109,7 @@ class EventData:
 
 
 def event():
-    print(yellow('Please select a Folder'))
+    print(yellow('Please select a Folder to save'))
     target = filedialog.askdirectory(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select folder to save")
     if not target:
         print(red("No target folder selected, Return to main menu"))

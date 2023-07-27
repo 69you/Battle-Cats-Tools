@@ -18,7 +18,7 @@ class env:
     KR_iv = '9b13c2121d39f1353a125fed98696649'
 
 def split(file_path, start_byte:int, arrange:int) -> bytes:
-    '''Split Pack file into readable bytes''' 
+    '''Split Pack file into readable bytes'''
     with open(file_path, 'rb') as file:
         return file.read()[start_byte:start_byte+arrange]
 
@@ -128,7 +128,7 @@ def decrypt():
         return __main__.main()
         # raise SystemExit(red("No APK selected"))
     print(f'{green("APK selected: ")}  {apk}\n')
-    print(yellow('Please select a Folder'))
+    print(yellow('Please select a Folder to save'))
     root = filedialog.askdirectory(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select folder to save")
     if not root:
         print(red("No target folder selected, Return to main menu"))
