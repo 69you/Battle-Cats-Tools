@@ -1,4 +1,3 @@
-from pprint import pprint
 import inquirer, os, time, sys
 from utils_ import decrypt, adb, event_old, event_new, adb_event, bcu_unit
 
