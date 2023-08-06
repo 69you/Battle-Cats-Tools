@@ -100,7 +100,7 @@ def event():
         print(red("No target folder selected, Return to main menu"))
         return __main__.main()
     print(f'{green("Folder selected: ")}  {target}\n')
-    for cc in ["jp", "tw"]:#"en", "kr"
+    for cc in ["jp", "tw", "en", "kr"]:
         for file in ["sale.tsv", "gatya.tsv", "item.tsv"]:
             event_data = EventData(file=file, cc=cc)
             if event_data.accountCode == None or event_data.password == None or event_data.passwordRefreshToken == None:
