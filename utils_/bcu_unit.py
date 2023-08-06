@@ -23,7 +23,6 @@ anime = {
 def bcu_unit():
     print(yellow('Please select BCU Folder'))
     bcu_path = filedialog.askdirectory(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select BCU folder")
-    # bcu_path = r'C:\Users\you\Desktop\BATTLE CAT\BCU'
     if not bcu_path:
         print(red("No BCU folder selected, Return to main menu"))
         return __main__.main()
@@ -31,7 +30,6 @@ def bcu_unit():
     bcu_path = os.path.join(bcu_path,'workspace','_local','animations')
     print(yellow('Please select BC Assets Folder'))
     bc_assets = filedialog.askdirectory(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select BC assets folder")
-    # bc_assets = r'C:\Users\you\Desktop\BATTLE CAT\Battle-cat-data\jp'
     if not bc_assets:
         print(red("No BC assets folder selected, Return to main menu"))
         return __main__.main()
