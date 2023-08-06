@@ -108,12 +108,12 @@ def decrypt_pack(
                                 if f.read() != pack_res:
                                     with open(file, 'wb') as output:
                                         output.write(pack_res)
-                                        log['update'][item].append(name)
+                                        log['UPDATE'][item].append(name)
                                         print(f'{current}. {light_blue(f"{item}/{name}")} have been update! {gray("")}')
                         else:
                             with open(file, 'wb') as output:
                                 output.write(pack_res)
-                                log['new'][item].append(name)
+                                log['NEW'][item].append(name)
                                 print(f'{current}. {green(name)} add! {gray("")}')
                     except ValueError:
                         pass
