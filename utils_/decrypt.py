@@ -166,12 +166,12 @@ def decrypt():
     #decrypt
     items = [pack.split('.')[0] for pack in os.listdir(f'{root}\\APK\\LIST_PACK') if pack.endswith('.pack')]
     log = {
-        'new':{},
-        'update':{}
+        'NEW':{},
+        'UPDATE':{}
     }
     for _ in items:
-        log['new'][_] = []
-        log['update'][_] = []
+        log['NEW'][_] = []
+        log['UPDATE'][_] = []
     exist_file = []
     for roots, dirs, exist_files in os.walk(f'{root}\\assets'):
         for file in exist_files:
