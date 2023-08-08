@@ -10,16 +10,21 @@ anime = {
     '03': 'kb',
 }
 
+def padding_zeros(id):
+    return id if len(id) == 3 else '0' + id if len(id) == 2 else '00' + id if len(id) == 1 else id
+
 def bcu_unit():
     print(color.yellow('Please select BCU Folder'))
-    bcu_path = filedialog.askdirectory(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select BCU folder")
+    # bcu_path = filedialog.askdirectory(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select BCU folder")
+    bcu_path = r"D:\BC\BCU"
     if not bcu_path:
         print(color.red("No BCU folder selected, Return to main menu"))
         return __main__.main()
     print(f'{color.green("BCU Folder selected: ")}  {bcu_path}\n')
     bcu_path = os.path.join(bcu_path,'workspace','_local','animations')
     print(color.yellow('Please select BC Assets Folder'))
-    bc_assets = filedialog.askdirectory(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select BC assets folder")
+    # bc_assets = filedialog.askdirectory(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select BC assets folder")
+    bc_assets = r"D:\BC\Battle-cat-data\jp"
     if not bc_assets:
         print(color.red("No BC assets folder selected, Return to main menu"))
         return __main__.main()
@@ -47,6 +52,7 @@ def bcu_unit():
             else:
                 print(color.red("Invalid unit form, Return to main menu"))
                 return __main__.main()
+            id = padding_zeros(id)
             if not os.path.exists(f'{sprite_path}/{id}_{form}.png'):
                 print(color.red("No sprite or unit found, Return to main menu"))
                 return __main__.main()
@@ -89,6 +95,7 @@ def bcu_unit():
                 print(color.red("No enemy id entered, Return to main menu"))
                 return __main__.main()
             print(f'{color.green("Enemy id: ")}  {id}\n')
+            id = padding_zeros(id)
             if not os.path.exists(f'{sprite_path}/{id}_e.png'):
                 print(color.red("No sprite or enemy found, Return to main menu"))
                 return __main__.main()
