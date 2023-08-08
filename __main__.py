@@ -1,27 +1,6 @@
 import inquirer, os, time, sys
+from utils_.func import color, ask
 from utils_ import decrypt, adb, event_old, event_new, adb_event, bcu_unit
-
-def red(text) -> str:
-    return('\033[31m' + text + '\033[0m')
-def green(text) -> str:
-    return('\033[32m' + text + '\033[0m')
-def yellow(text) -> str:
-    return('\033[33m' + text + '\033[0m')
-def light_blue(text) -> str:
-    return('\033[36m' + text + '\033[0m')
-def gray(text) -> str:
-    return('\033[37m' + text + '\033[0m')
-
-def ask(message, choices):
-    questions = [
-        inquirer.List(
-            "ans",
-            message=message,
-            choices=choices,
-            default=None
-            ),
-        ]
-    return inquirer.prompt(questions)["ans"]
 
 def run(func):
     os.system('cls')
@@ -31,7 +10,7 @@ def run(func):
     main()
 
 def main():
-    match(ask("Please Select a mode", ["Decrypt a apk", "Get server file", "Get Event File", "Moving Unit to BCU","Exit"])):
+    match(ask.ask("Please Select a mode", ["Decrypt a apk", "Get server file", "Get Event File", "Moving Unit to BCU","Exit"])):
         case "Decrypt a apk":
             run(decrypt.decrypt)
         case "Get server file":
@@ -51,7 +30,7 @@ def main():
         case "Moving Unit to BCU":
             run(bcu_unit.bcu_unit)
         case "Exit":
-            print(green('Thanks for using!'))
+            print(color.green('Thanks for using!'))
             time.sleep(2)
             exit(0)
 

@@ -3,6 +3,7 @@ from io import BufferedReader
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
 from tkinter import filedialog
+from utils_.func import color, ask
 import __main__
 
 class env:
@@ -22,17 +23,6 @@ def split(file_path, start_byte:int, arrange:int) -> bytes:
     '''Split Pack file into readable bytes'''
     with open(file_path, 'rb') as file:
         return file.read()[start_byte:start_byte+arrange]
-
-def red(text) -> str:
-    return('\033[31m' + text + '\033[0m')
-def green(text) -> str:
-    return('\033[32m' + text + '\033[0m')
-def yellow(text) -> str:
-    return('\033[33m' + text + '\033[0m')
-def light_blue(text) -> str:
-    return('\033[36m' + text + '\033[0m')
-def gray(text) -> str:
-    return('\033[37m' + text + '\033[0m')
 
 def delete_padding(pack_res :bytes) -> bytes:
     '''delete the unreadable padding at the end of file'''
@@ -99,7 +89,7 @@ def decrypt_pack(
                 if 'ImageDataLocal' in item:
                     with open(file, 'wb') as split_file:
                         split_file.write(chunk)
-                        print(f'{current}. {green(name)} add! {gray("")} ')
+                        print(f'{current}. {color.green(name)} add! {color.gray("")} ')
                 else:
                     try:
                         pack_res = delete_padding(AES.new(bytes.fromhex(getattr(env, f'{cc.upper()}_PACK')),AES.MODE_CBC,bytes.fromhex(getattr(env, f'{cc.upper()}_iv'))).decrypt(chunk))
@@ -109,12 +99,12 @@ def decrypt_pack(
                                     with open(file, 'wb') as output:
                                         output.write(pack_res)
                                         log['UPDATE'][item].append(name)
-                                        print(f'{current}. {light_blue(f"{item}/{name}")} have been update! {gray("")}')
+                                        print(f'{current}. {color.light_blue(f"{item}/{name}")} have been update! {color.gray("")}')
                         else:
                             with open(file, 'wb') as output:
                                 output.write(pack_res)
                                 log['NEW'][item].append(name)
-                                print(f'{current}. {green(name)} add! {gray("")}')
+                                print(f'{current}. {color.green(name)} add! {gray("")}')
                     except ValueError:
                         pass
                 current += 1 
@@ -126,23 +116,23 @@ def decrypt_pack(
 # root = 
 def decrypt():
     global log
-    print(yellow('Please select a APK'))
+    print(color.yellow('Please select a APK'))
     apk = filedialog.askopenfilename(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select file",filetypes = (("apk files","*.apk"),("all files","*.*")))
     if not apk:
-        print(red("No APK selected, Return to main menu"))
+        print(color.red("No APK selected, Return to main menu"))
         return __main__.main()
         # raise SystemExit(red("No APK selected"))
-    print(f'{green("APK selected: ")}  {apk}\n')
-    print(yellow('Please select a Folder to save'))
+    print(f'{color.green("APK selected: ")}  {apk}\n')
+    print(color.yellow('Please select a Folder to save'))
     root = filedialog.askdirectory(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select folder to save")
     if not root:
-        print(red("No target folder selected, Return to main menu"))
+        print(color.red("No target folder selected, Return to main menu"))
         return __main__.main()
         # raise SystemExit(red("No target folder selected"))
-    print(f'{green("Folder selected: ")}  {root}\n')
-    cc = input(yellow('please enter the country code: ') + gray('(jp/tw/en/kr): '))
+    print(f'{color.green("Folder selected: ")}  {root}\n')
+    cc = input(color.yellow('please enter the country code: ') + color.gray('(jp/tw/en/kr): '))
     if (cc.lower() != 'jp') and (cc.lower() != 'tw') and (cc.lower() != 'en') and (cc.lower() != 'kr'):
-        print(red('Please enter a valid country code, Return to main menu'))
+        print(color.red('Please enter a valid country code, Return to main menu'))
         return __main__.main()
         # raise SystemExit(red('Please enter a valid country code'))
     #init
@@ -194,7 +184,7 @@ def decrypt():
     #remove useless
     shutil.rmtree(f'{root}\\APK')
     path = os.path.join(root, 'assets')
-    print(f"All files done! Please check {yellow(path)}".replace('\\','/'))
+    print(f"All files done! Please check {color.yellow(path)}".replace('\\','/'))
     data = json.loads(json.dumps(log))
     markdown = ""
     for key, value in data.items():

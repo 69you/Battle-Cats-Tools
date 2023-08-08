@@ -1,17 +1,8 @@
 import datetime, hashlib, hmac, requests, os
 from tkinter import filedialog
+from utils_.func import color
 import __main__
 
-def red(text) -> str:
-    return('\033[31m' + text + '\033[0m')
-def green(text) -> str:
-    return('\033[32m' + text + '\033[0m')
-def yellow(text) -> str:
-    return('\033[33m' + text + '\033[0m')
-def light_blue(text) -> str:
-    return('\033[36m' + text + '\033[0m')
-def gray(text) -> str:
-    return('\033[37m' + text + '\033[0m')
 
 class EventData:
 
@@ -109,14 +100,14 @@ class EventData:
 
 
 def event():
-    print(yellow('Please select a Folder to save'))
+    print(color.yellow('Please select a Folder to save'))
     target = filedialog.askdirectory(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select folder to save")
     if not target:
-        print(red("No target folder selected, Return to main menu"))
+        print(color.red("No target folder selected, Return to main menu"))
         return __main__.main()
-    print(f'{green("Folder selected: ")}  {target}\n')
+    print(f'{color.green("Folder selected: ")}  {target}\n')
     for cc in ["jp", "tw", "en", "kr"]:
         for file in ["sale.tsv", "gatya.tsv", "item.tsv"]:
             event_data = EventData(file=file, cc=cc)
             event_data.to_file(target, cc, file)
-    print(green("Finish grabbing event file"))
+    print(color.green("Finish grabbing event file"))

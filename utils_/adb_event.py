@@ -4,6 +4,7 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
 from tkinter import filedialog
 from pathlib import Path
+from utils_.func import color
 import __main__
 
 class env:
@@ -16,17 +17,6 @@ files = (
     ('408f66def075926baea9466e70504a3b.dat','{}_daily.tsv'),
     ('523af537946b79c4f8369ed39ba78605.dat','{}_ad.json'),
 )
-
-def red(text) -> str:
-    return('\033[31m' + text + '\033[0m')
-def green(text) -> str:
-    return('\033[32m' + text + '\033[0m')
-def yellow(text) -> str:
-    return('\033[33m' + text + '\033[0m')
-def light_blue(text) -> str:
-    return('\033[36m' + text + '\033[0m')
-def gray(text) -> str:
-    return('\033[37m' + text + '\033[0m')
 
 package = 'jp.co.ponos.battlecats{}'
 
@@ -68,7 +58,7 @@ def decrypt(
         f.close()
         with open(f'{target}\\{name}', 'wb') as output:
             output.write(res)
-            print(f'{green(name)} add! {gray("")}')
+            print(f'{color.green(name)} add! {color.gray("")}')
             os.remove(f'{target}\\{file}')
             if name.endswith('.tsv'):
                 if word.encode() in res:
@@ -82,31 +72,31 @@ def decrypt(
 def adb_event():
     port = conntect()
     if not port:
-        print(red("No device connected, Return to main menu"))
+        print(color.red("No device connected, Return to main menu"))
         return __main__.main()
         # raise SystemExit(red("No device connected"))
-    print(f"{green('Device detect on port')} {port}\n")
+    print(f"{color.green('Device detect on port')} {port}\n")
     if not check_root(port):
-        print(red("Device not been root or some error occur, Return to main menu"))
+        print(color.red("Device not been root or some error occur, Return to main menu"))
         return __main__.main()
         # raise SystemExit(red("Device not been root or some error occur"))
-    cc = input(yellow('please enter the country code: ') + gray('(jp/tw/en/kr): '))
+    cc = input(color.yellow('please enter the country code: ') + color.gray('(jp/tw/en/kr): '))
     if (cc.lower() != 'jp') and (cc.lower() != 'tw') and (cc.lower() != 'en') and (cc.lower() != 'kr'):
-        print(red('Please enter a valid country code, Return to main menu'))
+        print(color.red('Please enter a valid country code, Return to main menu'))
         return __main__.main()
         # raise SystemExit(red('Please enter a valid country code'))
     if not check_apk_exist(port, cc):
-        print(red('APK not installed, Return to main menu'))
+        print(color.red('APK not installed, Return to main menu'))
         return __main__.main()
         # raise SystemExit(red(f'{cc.upper()} Version not found'))
-    print(f'{green("Country Version selected: ")}  {cc}\n')
+    print(f'{color.green("Country Version selected: ")}  {cc}\n')
     cc = '' if cc == 'jp' else cc
-    print(yellow('Please select a Folder to save'))
+    print(color.yellow('Please select a Folder to save'))
     target = filedialog.askdirectory(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select folder to save")
     if not target:
-        print(red("No target folder selected, Return to main menu"))
+        print(color.red("No target folder selected, Return to main menu"))
         return __main__.main()
-    print(f'{green("Folder selected: ")}  {target}\n')
+    print(f'{color.green("Folder selected: ")}  {target}\n')
     for key,value in files:
         try:
             subprocess.run(
@@ -117,7 +107,7 @@ def adb_event():
             shell=True
             )
         except Exception:
-            print(red('Some error occur, Return to main menu'))
+            print(color.red('Some error occur, Return to main menu'))
             return __main__.main()
     # os.system('cls')
     if cc == '': cc = 'jp'
@@ -126,4 +116,4 @@ def adb_event():
             for key, value in files:
                 if key == _:
                     decrypt(target, _, value.format(cc))
-    print(f"All files done! Please check {yellow(target)}".replace('\\','/'))
+    print(f"All files done! Please check {color.yellow(target)}".replace('\\','/'))
