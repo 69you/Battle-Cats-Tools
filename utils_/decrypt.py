@@ -94,17 +94,23 @@ def decrypt_pack(
                     try:
                         pack_res = delete_padding(AES.new(bytes.fromhex(getattr(env, f'{cc.upper()}_PACK')),AES.MODE_CBC,bytes.fromhex(getattr(env, f'{cc.upper()}_iv'))).decrypt(chunk))
                         if name in files:
-                            with open(file, 'rb')as f:
-                                if f.read() != pack_res:
-                                    with open(file, 'wb') as output:
-                                        output.write(pack_res)
-                                        log['UPDATE'][item].append(name)
-                                        print(f'{current}. {color.light_blue(f"{item}/{name}")} have been update! {color.gray("")}')
+                            try:
+                                with open(file, 'rb')as f:
+                                    if f.read() != pack_res:
+                                        with open(file, 'wb') as output:
+                                            output.write(pack_res)
+                                            log['UPDATE'][item].append(name)
+                                            print(f'{current}. {color.light_blue(f"{item}/{name}")} have been update! {color.gray("")}')
+                            except FileNotFoundError:
+                                with open(file, 'wb') as output:
+                                    output.write(pack_res)
+                                    log['UPDATE'][item].append(name)
+                                    print(f'{current}. {color.light_blue(f"{item}/{name}")} have been update! {color.gray("")}')
                         else:
                             with open(file, 'wb') as output:
                                 output.write(pack_res)
                                 log['NEW'][item].append(name)
-                                print(f'{current}. {color.green(name)} add! {gray("")}')
+                                print(f'{current}. {color.green(name)} add! {color.gray("")}')
                     except ValueError:
                         pass
                 current += 1 
@@ -195,7 +201,7 @@ def decrypt():
                     markdown += f"* #### [{item}]({env.BASE_URL}/tree/main/{cc}/assets/{item})\n"
                     for name in data[key][item]:
                         markdown += f"    - [{name}]({env.BASE_URL}/blob/main/{cc}/assets/{item}/{name})\n"
-                markdown += "<br><br>\n\n"
+                    markdown += "<br><br>\n\n"
     if not os.path.exists(f'{root}\\changelog'):
         os.mkdir(os.path.join(root,'changelog'), mode=0o777)
     with open(f'{root}\\changelog\\changelog.md', 'w') as f:

@@ -10,14 +10,14 @@ def run(func):
     main()
 
 def main():
-    match(ask.ask("Please Select a mode", ["Decrypt a apk", "Get server file", "Get Event File", "Moving Unit to BCU","Exit"])):
+    match(ask.ask("Please Select a mode", ["Decrypt a apk", "Get server file", "Get Event File", "BCSFE", "Moving Unit to BCU","Exit"])):
         case "Decrypt a apk":
             run(decrypt.decrypt)
         case "Get server file":
             run(adb.adb)
         case "Get Event File":
             os.system('cls')
-            match(ask("Please Select a mode", ["The old Way", "The new Way", "By ADB","Back"])):
+            match(ask.ask("Please Select a mode", ["The old Way", "The new Way", "By ADB","Back"])):
                 case "The old Way":
                     run(event_old.event)
                 case "The new Way":
@@ -29,6 +29,8 @@ def main():
                     main()
         case "Moving Unit to BCU":
             run(bcu_unit.bcu_unit)
+        case "BSCFE":
+            ...
         case "Exit":
             print(color.green('Thanks for using!'))
             time.sleep(2)
