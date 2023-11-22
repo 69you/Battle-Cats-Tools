@@ -30,7 +30,10 @@ def main():
         case "Moving Unit to BCU":
             run(bcu_unit.bcu_unit)
         case "BSCFE":
-            ...
+            print("Still in development, finish when I have time")
+            time.sleep(2)
+            os.system('cls')
+            main()
         case "Exit":
             print(color.green('Thanks for using!'))
             time.sleep(2)
