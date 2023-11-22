@@ -7,7 +7,6 @@ from utils_.func import color, ask
 import __main__
 
 class env:
-    BASE_URL = "https://github.com/69you/Battle-cat-data"
     LIST = 'b484857901742afc'
     PACK = '89a0f99078419c28'
     JP_PACK = 'd754868de89d717fa9e7b06da45ae9e3'
@@ -78,7 +77,6 @@ def decrypt_pack(
     ):
     '''decrypt pack file'''
     current = 1
-    log
     for line in lines:
         try:
             if count!=0 or count!=int(lines[0].strip())+1:     
@@ -99,17 +97,14 @@ def decrypt_pack(
                                     if f.read() != pack_res:
                                         with open(file, 'wb') as output:
                                             output.write(pack_res)
-                                            log['UPDATE'][item].append(name)
                                             print(f'{current}. {color.light_blue(f"{item}/{name}")} have been update! {color.gray("")}')
                             except FileNotFoundError:
                                 with open(file, 'wb') as output:
                                     output.write(pack_res)
-                                    log['UPDATE'][item].append(name)
                                     print(f'{current}. {color.light_blue(f"{item}/{name}")} have been update! {color.gray("")}')
                         else:
                             with open(file, 'wb') as output:
                                 output.write(pack_res)
-                                log['NEW'][item].append(name)
                                 print(f'{current}. {color.green(name)} add! {color.gray("")}')
                     except ValueError:
                         pass
@@ -121,7 +116,6 @@ def decrypt_pack(
 #setup
 # root = 
 def decrypt():
-    global log
     print(color.yellow('Please select a APK'))
     apk = filedialog.askopenfilename(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select file",filetypes = (("apk files","*.apk"),("all files","*.*")))
     if not apk:
@@ -191,19 +185,4 @@ def decrypt():
     shutil.rmtree(f'{root}\\APK')
     path = os.path.join(root, 'assets')
     print(f"All files done! Please check {color.yellow(path)}".replace('\\','/'))
-    data = json.loads(json.dumps(log))
-    markdown = ""
-    for key, value in data.items():
-        if len(list(data[key].keys())) != 0:
-            markdown += f"### {key}\n"
-            for item in list(data[key].keys()):
-                if len(data[key][item]) != 0:
-                    markdown += f"* #### [{item}]({env.BASE_URL}/tree/main/{cc}/assets/{item})\n"
-                    for name in data[key][item]:
-                        markdown += f"    - [{name}]({env.BASE_URL}/blob/main/{cc}/assets/{item}/{name})\n"
-                    markdown += "<br><br>\n\n"
-    if not os.path.exists(f'{root}\\changelog'):
-        os.mkdir(os.path.join(root,'changelog'), mode=0o777)
-    with open(f'{root}\\changelog\\changelog.md', 'w') as f:
-        f.write(markdown)
     os.system('pause')
