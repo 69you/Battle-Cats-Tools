@@ -1,4 +1,4 @@
-import os, shutil, zipfile, json
+import os, shutil, zipfile, requests
 from io import BufferedReader
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
@@ -23,49 +23,18 @@ def split(file_path, start_byte:int, arrange:int) -> bytes:
     with open(file_path, 'rb') as file:
         return file.read()[start_byte:start_byte+arrange]
 
-def delete_padding(pack_res :bytes) -> bytes:
-    '''delete the unreadable padding at the end of file'''
-    last =  pack_res[-1:]
-    if last == b'\x00':
-        return pack_res[:-1]
-    elif last == b'\x01':
-        return pack_res[:-1]
-    elif last == b'\x02':
-        return pack_res[:-2]
-    elif last == b'\x03':
-        return pack_res[:-3]
-    elif last == b'\x04':
-        return pack_res[:-4]
-    elif last == b'\x05':
-        return pack_res[:-5]
-    elif last == b'\x06':
-        return pack_res[:-6]
-    elif last == b'\x07':
-        return pack_res[:-7]
-    elif last == b'\x08':
-        return pack_res[:-8]
-    elif last == b'\t':
-        return pack_res[:-9]
-    elif last == b'\n':
-        superbytetest = last[-2:]
-        if superbytetest == b'\n\n':
-            return pack_res[:-10]
-        else:
-            return pack_res
-    elif last == b'\x0b':
-        return pack_res[:-11]
-    elif last == b'\x0c':
-        return pack_res[:-12]
-    elif last == b'\r':
-        return pack_res[:-13]
-    elif last == b'\x0e':
-        return pack_res[:-14]
-    elif last == b'\x0f':
-        return pack_res[:-15]
-    elif last == b'\x10':
-        return pack_res[:-16]
-    else:
-        return pack_res
+def delete_padding(pack_res: bytes) -> bytes:
+    '''Delete the unreadable padding at the end of file'''
+    padding_map = {
+        b'\x00': 1, b'\x01': 1, b'\x02': 2, b'\x03': 3,
+        b'\x04': 4, b'\x05': 5, b'\x06': 6, b'\x07': 7,
+        b'\x08': 8, b'\t': 9, b'\n': 10, b'\x0b': 11,
+        b'\x0c': 12, b'\r': 13, b'\x0e': 14, b'\x0f': 15,
+        b'\x10': 16
+    }
+    last = pack_res[-1:]
+    padding_count = padding_map.get(last, 0)
+    return pack_res[:-padding_count] if padding_count > 0 else pack_res
 
 def decrypt_pack(
         root: str,
@@ -113,15 +82,45 @@ def decrypt_pack(
 
 
 '''__main__'''
-#setup
-# root = 
 def decrypt():
-    print(color.yellow('Please select a APK'))
-    apk = filedialog.askopenfilename(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select file",filetypes = (("apk files","*.apk"),("all files","*.*")))
-    if not apk:
-        print(color.red("No APK selected, Return to main menu"))
-        return __main__.main()
-        # raise SystemExit(red("No APK selected"))
+    match(ask.ask("Have you installed the apk?", ["Yes", "No"])):
+        case "Yes":
+            print(color.yellow('Please select a APK'))
+            apk = filedialog.askopenfilename(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select file",filetypes = (("apk files","*.apk"),("all files","*.*")))
+            if not apk:
+                print(color.red("No APK selected, Return to main menu"))
+                return __main__.main()
+                # raise SystemExit(red("No APK selected"))
+        case "No":
+            URL = "https://d.apkpure.com/b/APK/jp.co.ponos.battlecats{}?versionCode={}0"
+            info = input(f'please input country_code and version with a space\n Ex: {color.yellow("jp 12.6.1")}')
+            cc = info.split(" ")[0]
+            version = info.split[1]
+            if (cc.lower() != 'jp') and (cc.lower() != 'tw') and (cc.lower() != 'en') and (cc.lower() != 'kr'):
+                print(color.red('Please enter a valid country code, Return to main menu'))
+                return __main__.main()
+            first, second, third = version.split('.')
+            versions = ''.join(f'{v:0>2}' for v in (first, second, third))
+            try:
+                res = requests.get(
+                URL.format('' if cc =="jp" else cc, versions),
+                stream=True,
+                headers={
+                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/601.7.5 (KHTML, like Gecko) ''Version/9.1.2 Safari/601.7.5 '
+                    }
+                )
+                with open('./tar.apk', 'wb') as file:
+                    print(f'{color.green("Downloading...")}')
+                    for chunk in res.iter_content(chunk_size=1024):
+                        if chunk: file.write(chunk)
+                apk = f"{os.getcwd()}/tar.apk"
+            except:
+                print(color.red("Some Err occurred, Return to main menu"))
+                try:
+                    os.remove("./tar.apk")
+                except:
+                    pass
+                return __main__.main()
     print(f'{color.green("APK selected: ")}  {apk}\n')
     print(color.yellow('Please select a Folder to save'))
     root = filedialog.askdirectory(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select folder to save")
@@ -154,14 +153,7 @@ def decrypt():
     if not os.path.exists(f"{root}\\APK\\txt"):
         os.makedirs(name=f"{root}\\APK\\txt",mode=0o777)
     #decrypt
-    items = [pack.split('.')[0] for pack in os.listdir(f'{root}\\APK\\LIST_PACK') if pack.endswith('.pack')]
-    log = {
-        'NEW':{},
-        'UPDATE':{}
-    }
-    for _ in items:
-        log['NEW'][_] = []
-        log['UPDATE'][_] = []
+    items = [pack.split('.')[0] for pack in os.listdir(f'{root}\\APK\\LIST_PACK') if pack.endswith('.pack') and os.path.isfile(pack.replace(".pack", ".list"))]
     exist_file = []
     for roots, dirs, exist_files in os.walk(f'{root}\\assets'):
         for file in exist_files:
