@@ -2,3 +2,5 @@ inquirer
 pycryptodome
 tk
 requests
+bs4
+selenium
