@@ -93,9 +93,9 @@ def decrypt():
                 # raise SystemExit(red("No APK selected"))
         case "No":
             URL = "https://d.apkpure.com/b/APK/jp.co.ponos.battlecats{}?versionCode={}0"
-            info = input(f'please input country_code and version with a space\n Ex: {color.yellow("jp 12.6.1")}')
+            info = input(f'please input country_code and version with a space\n Ex: {color.yellow("jp 12.6.1")}  ')
             cc = info.split(" ")[0]
-            version = info.split[1]
+            version = info.split(" ")[1]
             if (cc.lower() != 'jp') and (cc.lower() != 'tw') and (cc.lower() != 'en') and (cc.lower() != 'kr'):
                 print(color.red('Please enter a valid country code, Return to main menu'))
                 return __main__.main()
@@ -153,11 +153,11 @@ def decrypt():
     if not os.path.exists(f"{root}\\APK\\txt"):
         os.makedirs(name=f"{root}\\APK\\txt",mode=0o777)
     #decrypt
-    items = [pack.split('.')[0] for pack in os.listdir(f'{root}\\APK\\LIST_PACK') if pack.endswith('.pack') and os.path.isfile(pack.replace(".pack", ".list"))]
-    exist_file = []
+    items = [pack.split('.')[0] for pack in os.listdir(f'{root}\\APK\\LIST_PACK') if pack.endswith('.pack')]
+    exist_files = []
     for roots, dirs, exist_files in os.walk(f'{root}\\assets'):
         for file in exist_files:
-            exist_file.append(file)
+            exist_files.append(file)
     for item in items:
         #decode list
         with open(f'{root}\\APK\\LIST_PACK\\{item}.list','rb') as in_list:
@@ -172,7 +172,7 @@ def decrypt():
         with open (f'{root}\\APK\\txt\\{item}.txt','r') as r_txt:
             lines = r_txt.readlines()
         count = 0
-        decrypt_pack(root,cc,item,lines,count,exist_file)
+        decrypt_pack(root,cc,item,lines,count,exist_files)
     #remove useless
     shutil.rmtree(f'{root}\\APK')
     path = os.path.join(root, 'assets')
