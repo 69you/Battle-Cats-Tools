@@ -10,7 +10,7 @@ def bcuzip():
     if not bcuzip:
         print(color.red("No .pack.bcuzip selected, Return to main menu"))
         return __main__.main()
-    print(color.green(f"File selected: {bcuzip}"))
+    print(f'{color.green(f"File selected: ")} {bcuzip}')
     root = filedialog.askdirectory(initialdir = f"C:\\Users\\{os.getlogin()}\\downloads",title = "Select folder to save")
     if not root:
         print(color.red("No target folder selected, Return to main menu"))
